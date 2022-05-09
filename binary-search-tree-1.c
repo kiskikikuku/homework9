@@ -24,10 +24,11 @@ int main(){
     int key;
     Node* head = NULL;
     Node* ptr = NULL; /* temp */
-
+    
     do
     {
         printf("\n\n");
+        printf("----------------[2018068040]------[Park Taehyun]----------------\n");
 		printf("----------------------------------------------------------------\n");
 		printf("                   Binary Search Tree #1                        \n");
 		printf("----------------------------------------------------------------\n");
@@ -97,13 +98,13 @@ int main(){
 }
 
 int initializeBST(Node** h){
-    if(*h != NULL)
-        freeBST(*h);
+    if(*h != NULL) // 비어있지 않은 트리
+        freeBST(*h); // 할당 해제 진행
     
     *h = (Node*)malloc(sizeof(Node));
     (*h)->left = NULL; // 루트
     (*h)->right = *h;
-    (*h)->key = -9999;
+    (*h)->key = -9999; // 공간 할당 및 값 초기화
 
     return 1;
 }
@@ -220,15 +221,15 @@ int deleteLeafNode(Node* head, int key){
 
 Node* searchRecursive(Node* ptr, int key){
     
-    if (ptr == NULL){
+    if (ptr == NULL) // key를 가진 노드 없음
         return NULL;
-    }
 
-    if(ptr -> key < key) // key값 비교
-        searchRecursive(ptr->right, key); // 찾는 key가 크면, 오른쪽으로
-    else
-        searchRecursive(ptr->left, key); // 찾는 key가 작으면, 왼쪽으로
-
+    if(ptr ->key < key) // key값 비교
+        ptr = searchRecursive(ptr->right, key); // 찾는 key가 크면, 오른쪽으로
+    
+    else if (ptr->key > key)
+        ptr = searchRecursive(ptr->left, key); // 찾는 key가 작으면, 왼쪽으로
+    
     return ptr; // key 일치
 }
 
@@ -255,22 +256,22 @@ void freeNode(Node* ptr){
     if(ptr){
         freeNode(ptr->left);
         freeNode(ptr->right);
-        free(ptr); // 후위탐색 (LRV) 응용하여 recursive 방식으로 노드 할당 해제
+        free(ptr); // 후위탐색 (LRV) 이용하여 recursive 방식으로 노드들을 순차적으로 할당 해제
     }
 
 }
 
 int freeBST(Node* head){
     
-    if(head->left == NULL){ //공백
-        free(head);
+    if(head->left == NULL){ //공백의 경우
+        free(head); // 할당 해제
         return 1;
     }
 
-    Node* p = head->left;
+    Node* p = head->left; // 해제할 노드를 포인팅
 
-    freeNode(p);
-    free(head);
+    freeNode(p); // 노드 할당해제 함수
+    free(head); // 헤드 할당 해제
 
     return 1;
 }
